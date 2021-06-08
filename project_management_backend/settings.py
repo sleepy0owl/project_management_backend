@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'user_management'
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,41 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version' : 1,
+    'disable_existing_loggers' : False,
+    'formatters' : {
+        'file' : {
+            'format' : '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        },
+        'console' : {
+            'format' : '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        }
+    },
+    'handlers' : {
+        'file' : {
+            'level' : 'INFO',
+            'class' : 'logging.FileHandler',
+            'filename' : 'app.log',
+            'formatter': 'file'
+        },
+        'console' : {
+            'level' : 'INFO',
+            'class' : 'logging.StreamHandler',
+            'formatter': 'console'
+        }
+    },
+    'loggers' : {
+        'django' : {
+            'level' : 'INFO',
+            'handlers' : ['console'],
+            'propagate' : True
+        },
+        'user_management' :{
+            'level' : 'INFO',
+            'handlers' : ['file'],
+            'propagate' : True
+        }
+    }
+}
