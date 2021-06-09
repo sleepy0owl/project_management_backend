@@ -1,6 +1,5 @@
 import logging
 
-from rest_framework.settings import APISettings
 
 from user_management.models import Users
 from rest_framework.decorators import api_view
@@ -294,14 +293,14 @@ def update_card(request):
         data = request.data
         logger.info("request data %s", data)
         card_name = data['card_name']
-        card_desciption = data['card_description']
+        card_description = data['card_description']
         card_id = data['card_id']
         due_date = data['due_date']
         priority = data['priority']
         with transaction.atomic():
             card_data = {
                 "card_name": card_name,
-                "card_desciption": card_desciption,
+                "card_description": card_description,
                 "due_date" : due_date,
                 "priority" : priority
             }
