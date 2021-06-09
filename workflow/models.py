@@ -8,7 +8,7 @@ class WorkflowBoard(models.Model):
     board_id = models.AutoField(primary_key=True)
     board_name = models.CharField(max_length=100, null=False)
     board_description = models.CharField(max_length=254)
-    created_on = models.DateTimeField(null=False, auto_now=True)
+    updated_on = models.DateTimeField(null=False, auto_now=True)
     user = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='board')
 
     class Meta:
@@ -17,7 +17,7 @@ class WorkflowBoard(models.Model):
 class BoardList(models.Model):
     list_id = models.AutoField(primary_key=True)
     list_name = models.CharField(max_length=45, null=False)
-    created_on = models.DateTimeField(null=False, auto_now=True)
+    updated_on = models.DateTimeField(null=False, auto_now=True)
     board = models.ForeignKey(WorkflowBoard, on_delete=models.CASCADE, related_name='list')
 
     class Meta:
