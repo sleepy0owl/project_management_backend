@@ -256,12 +256,14 @@ def create_card(request):
         logger.info("request data %s", data)
         card_name = data['card_name']
         card_desciption = data['card_description']
+        due_date = data['due_date']
         list_id = data['list_id']
         with transaction.atomic():
             current_list = BoardList.objects.get(pk=list_id)
             card_data = {
                 "card_name": card_name,
-                "card_desciption": card_desciption
+                "card_desciption": card_desciption,
+                "due_date" : due_date
             }
             current_card = Card.objects.create(
                 **card_data, board_list=current_list)

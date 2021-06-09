@@ -28,6 +28,7 @@ class Card(models.Model):
     card_name = models.CharField(max_length=100, null=False)
     card_desciption = models.CharField(max_length=254)
     updated_on = models.DateTimeField(null=False, auto_now=True)
+    due_date = models.DateField(null=True)
     board_list = models.ForeignKey(BoardList, on_delete=models.CASCADE, related_name='card')
 
     class Meta:
