@@ -18,7 +18,7 @@ class BoardList(models.Model):
     list_id = models.AutoField(primary_key=True)
     list_name = models.CharField(max_length=45, null=False)
     updated_on = models.DateTimeField(null=False, auto_now=True)
-    board = models.ForeignKey(WorkflowBoard, on_delete=models.CASCADE, related_name='list')
+    board = models.ForeignKey(WorkflowBoard, on_delete=models.CASCADE, related_name='board_list')
 
     class Meta:
         db_table = 'project_board_list'
