@@ -1,5 +1,6 @@
 import logging
 import re
+import hashlib
 from user_management.errors import UserDoesntExistsException
 from .models import Users
 
@@ -31,3 +32,9 @@ def get_password(email : str) -> str:
     user = Users.objects.get(email_address=email)
     password_from_db = user.password
     return password_from_db
+
+def convert_password_md5(password : str) -> str:
+    password = password.encode('utf-8')
+    md5_password = hashlib.md5(password)
+    md5_password = md5_password.hexdigest()
+    return md5_password
