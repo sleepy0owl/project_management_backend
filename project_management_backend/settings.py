@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'user_management'
+    'user_management',
+    'workflow'
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,11 @@ LOGGING = {
             'propagate' : True
         },
         'user_management' :{
+            'level' : 'INFO',
+            'handlers' : ['file'],
+            'propagate' : True
+        },
+        'workflow':{
             'level' : 'INFO',
             'handlers' : ['file'],
             'propagate' : True
