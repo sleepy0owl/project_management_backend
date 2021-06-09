@@ -27,7 +27,9 @@ def test_get(request):
 
 @api_view(['POST'])
 def create_board(request):
+    """ takes user id check's subscription type and creates a board """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         user_id = data['user_id']
@@ -43,6 +45,7 @@ def create_board(request):
                 board_count = WorkflowBoard.objects.filter(
                     user_id=user_id).count()
                 logger.info("user's board count %s", board_count)
+                #! subscription type free
                 if board_count < 10:
                     board_data = {
                         "board_name": board_name,
@@ -63,6 +66,7 @@ def create_board(request):
                     raise MaxBoardLimitReachedException(
                         "customer has reached max board limit")
             else:
+                #! subscription type paid
                 board_data = {
                     "board_name": board_name,
                     "board_description": board_description
@@ -77,20 +81,25 @@ def create_board(request):
                         "board": board_serializer.data
                     }
                 }
+                logger.info("================================= end  - ==============================")
                 return Response(response, status=status.HTTP_201_CREATED)
     except MaxBoardLimitReachedException as m:
         logger.exception(m)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
 def get_all_boards(request):
+    """ takes user'id and returns all boards """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         user_id = data['user_id']
@@ -105,17 +114,21 @@ def get_all_boards(request):
                     "boards" : board_serializers.data
                 }
             }
+            logger.info("================================= end  - ==============================")
             return Response(response, status=status.HTTP_200_OK)
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
 @api_view(['POST'])
 def get_board_details(request):
+    """ takes board's id and returns all information associated with it """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         board_id = data['board_id']
@@ -136,13 +149,16 @@ def get_board_details(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
 @api_view(['POST'])
 def create_list(request):
+    """ creates a list for a board """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         board_id = data['board_id']
@@ -167,12 +183,15 @@ def create_list(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
 def update_list(request):
+    """ updates a lists property """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         list_id = data['list_id']
@@ -194,12 +213,15 @@ def update_list(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
 def get_list_details(request):
+    """ takes list id and returns all the cards associated with it  """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         list_id = data['list_id']
@@ -220,13 +242,16 @@ def get_list_details(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
 @api_view(['POST'])
 def create_card(request):
+    """ creates a card for a list """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         card_name = data['card_name']
@@ -253,12 +278,15 @@ def create_card(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
 def update_card(request):
+    """ updates a cards name and description """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         card_name = data['card_name']
@@ -285,12 +313,15 @@ def update_card(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(["POST"])
 def get_card(request):
+    """ takes card's id and returns it;s details """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         card_id = data['card_id']
@@ -310,11 +341,14 @@ def get_card(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def change_card_list(request):
+    """ takes a card from one list and assign it to other """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         card_id = data['card_id']
@@ -337,5 +371,6 @@ def change_card_list(request):
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

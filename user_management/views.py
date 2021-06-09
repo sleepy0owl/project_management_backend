@@ -21,7 +21,9 @@ def test_get(request):
 
 @api_view(['POST'])
 def create_user(request):
+    """ user sign up """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         first_name = data['first_name']
@@ -61,6 +63,7 @@ def create_user(request):
                         "exception": False,
                         "data": None
                     }
+                    logger.info("================================= end  - ==============================")
                     return Response(response, status=status.HTTP_201_CREATED)
                 else:
                     logger.info("already has an account")
@@ -72,21 +75,26 @@ def create_user(request):
         logger.exception(u)
         response = FAILRESPONSE
         response['data'] = "user already exists"
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except WrongEmailFormatException as w:
         logger.exception(w)
         response = FAILRESPONSE
         response['data'] = "wrong email format"
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
         response['data'] = 'exception occured'
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def login_user(request):
+    """ user login """
     try:
+        logger.info("================================= start - ==============================")
         data = request.data
         logger.info("request data %s", data)
         email_address = data['email_address']
@@ -107,6 +115,7 @@ def login_user(request):
                         "exception": False,
                         "data": None
                         }
+                        logger.info("================================= end  - ==============================")
                         return Response(response, status=status.HTTP_200_OK)
                     else:
                         WrongPasswordException("password is wrong")
@@ -117,16 +126,20 @@ def login_user(request):
     except WrongPasswordException as w:
         logger.exception(w)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except UserDoesntExistsException as u:
         logger.exception(u)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except WrongEmailFormatException as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except Exception as e:
         logger.exception(e)
         response = FAILRESPONSE
+        logger.info("================================= end  - ==============================")
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
