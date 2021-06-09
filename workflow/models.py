@@ -30,6 +30,6 @@ class Card(models.Model):
     updated_on = models.DateTimeField(null=False, auto_now=True)
     due_date = models.DateField(null=True)
     board_list = models.ForeignKey(BoardList, on_delete=models.CASCADE, related_name='card')
-
+    priority = models.IntegerField(default=0)
     class Meta:
         db_table = 'project_list_card'

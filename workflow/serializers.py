@@ -18,7 +18,7 @@ class CardSerializer(serializers.ModelSerializer):
 class CardDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ['card_id', "card_name", "card_desciption", "updated_on", 'due_date']
+        fields = ['card_id', "card_name", "card_desciption", "updated_on", 'due_date', 'priority']
 
 
 class ListDetailSerializer(serializers.ModelSerializer):

@@ -258,12 +258,14 @@ def create_card(request):
         card_desciption = data['card_description']
         due_date = data['due_date']
         list_id = data['list_id']
+        priority = data['priority']
         with transaction.atomic():
             current_list = BoardList.objects.get(pk=list_id)
             card_data = {
                 "card_name": card_name,
                 "card_desciption": card_desciption,
-                "due_date" : due_date
+                "due_date" : due_date,
+                "priority" : priority
             }
             current_card = Card.objects.create(
                 **card_data, board_list=current_list)
@@ -294,11 +296,14 @@ def update_card(request):
         card_name = data['card_name']
         card_desciption = data['card_description']
         card_id = data['card_id']
-
+        due_date = data['due_date']
+        priority = data['priority']
         with transaction.atomic():
             card_data = {
                 "card_name": card_name,
-                "card_desciption": card_desciption
+                "card_desciption": card_desciption,
+                "due_date" : due_date,
+                "priority" : priority
             }
             Card.objects.filter(card_id=card_id).update(**card_data)
             current_card = Card.objects.get(pk=card_id)
