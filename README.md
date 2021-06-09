@@ -4,7 +4,7 @@ This project uses Python3, Django REST framework and sqlite3.
 ```
 - api/project/user/create/ | POST | 
 
-payload {"first_name" :"sourav","last_name" :"mondal","username" : "sleepyowl","email_address" : "sourav.mondal@abcd.com","password" : "1234","subscription_type" : 1
+request body{"first_name" :"sourav","last_name" :"mondal","username" : "sleepyowl","email_address" : "sourav.mondal@abcd.com","password" : "1234","subscription_type" : 1
 }
 
 here subscription_type = 1 is free and 2 is paid
@@ -13,7 +13,7 @@ here subscription_type = 1 is free and 2 is paid
 ```
 - api/project/user/login/  | POST |
 
-payload {
+request body{
     "email_address" : "sourav.mondal@abcd.com",
     "password" : "1234"
 }
@@ -23,7 +23,7 @@ payload {
 ```
 - api/project/board/create/ | POST |
 
-payload {
+request body{
     "user_id" : <int>,
     "board_name" : "Golang projects",
     "board_description" : "Golang project management board"
@@ -33,7 +33,7 @@ payload {
 ```
 - api/project/board/getbycustomer/ | POST |
 
-payload {
+request body{
     "user_id" : <int>
 }
 
@@ -41,7 +41,7 @@ payload {
 ```
 - api/project/board/details | POST |
 
-payload {
+request body{
      "board_id": <existing board id>
 }
 ```
@@ -49,7 +49,7 @@ payload {
 ```
 - api/project/list/create/ | POST |
 
-payload {
+request body{
     "board_id" : <existing board id>,
     "list_name" : "doing"
 }
@@ -58,7 +58,7 @@ payload {
 ```
 - api/project/list/update/ | POST |
 
-payload {
+request body{
     "list_id" : <existing list id>,
     "list_name" : <desired name>
 }
@@ -67,7 +67,7 @@ payload {
 ```
 - api/project/list/details/ | POST |
 
-payload {
+request body{
     "list_id" : <existing list id>
 }
 
@@ -75,7 +75,7 @@ payload {
 ```
 - api/project/card/create/ | POST |
 
-paylaod {
+request body {
     "list_id" : <existing list id>,
     "card_name" : "code review",
     "card_description" : "code review of a github repo",
@@ -88,7 +88,7 @@ here higher value of priority represnts high priority task
 ```
 - api/project/card/update/ | POST |
 
-paylaod {
+request body {
     "card_id": <existing card id>,
     "card_name": "Work on face recognition",
     "card_description": "Use OpenCv to build a face recognition API",
@@ -99,14 +99,14 @@ paylaod {
 ```
 ```
 - api/project/card/get/ | POST |
-payload {
+request body{
     "card_id" : <existing card it>
 }
 ```
 ```
 - api/project/card/changelist/ | POST |
 
-payload {
+request body{
     "card_id" : <existing card id>,
     "list_id" : <destination list id>
 }
