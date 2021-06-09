@@ -1,5 +1,7 @@
 import logging
 
+from rest_framework.settings import APISettings
+
 from user_management.models import Users
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -7,7 +9,8 @@ from rest_framework import status
 from django.db import transaction
 from django.db import connection
 from .models import Card, Users, WorkflowBoard, BoardList
-from .serializers import BoardSerializer, BoardListSerializer, CardSerializer
+from .serializers import BoardDetailSerializer, BoardSerializer, BoardListSerializer, CardSerializer
+from .serializers import ListDetailSerializer
 from .errors import MaxBoardLimitReachedException
 from constants import FAILRESPONSE, SUCCESSCODE
 # Create your views here.
@@ -112,7 +115,29 @@ def get_all_boards(request):
 
 @api_view(['POST'])
 def get_board_details(request):
-    pass
+    try:
+        data = request.data
+        logger.info("request data %s", data)
+        board_id = data['board_id']
+        
+        with transaction.atomic():
+            current_board = WorkflowBoard.objects.get(pk=board_id)
+            board_serializer = BoardDetailSerializer(current_board)
+
+            logger.info("board details %s", board_serializer.data)
+            response = {
+                "code" : SUCCESSCODE,
+                "exception" : False,
+                "data" : {
+                    "board_details" : board_serializer.data
+                }
+            }
+            return Response(response, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception(e)
+        response = FAILRESPONSE
+        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 @api_view(['POST'])
@@ -174,7 +199,29 @@ def update_list(request):
 
 @api_view(['POST'])
 def get_list_details(request):
-    pass
+    try:
+        data = request.data
+        logger.info("request data %s", data)
+        list_id = data['list_id']
+
+        with transaction.atomic():
+            current_list = BoardList.objects.get(pk=list_id)
+            list_serializer = ListDetailSerializer(current_list)
+
+            logger.info("list +card %s", list_serializer.data)
+            response = {
+                "code" : SUCCESSCODE,
+                "exception" : False,
+                "data" : {
+                    "list_details" : list_serializer.data
+                }
+            }
+            return Response(response, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception(e)
+        response = FAILRESPONSE
+        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 @api_view(['POST'])
@@ -241,6 +288,54 @@ def update_card(request):
         return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(["POST"])
+def get_card(request):
+    try:
+        data = request.data
+        logger.info("request data %s", data)
+        card_id = data['card_id']
+
+        with transaction.atomic():
+            card = Card.objects.get(pk=card_id)
+            card_serializer = CardSerializer(card)
+
+            response = {
+                "code": SUCCESSCODE,
+                "exception": False,
+                "data": {
+                    "card": card_serializer.data
+                }
+            }
+            return Response(response, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception(e)
+        response = FAILRESPONSE
+        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 @api_view(['POST'])
 def change_card_list(request):
-    pass
+    try:
+        data = request.data
+        logger.info("request data %s", data)
+        card_id = data['card_id']
+        destination_list = data['list_id']
+
+        with transaction.atomic():
+            new_list = BoardList.objects.get(pk=destination_list)
+            Card.objects.filter(card_id=card_id).update(board_list=new_list)
+
+            updated_list = BoardList.objects.get(pk=destination_list)
+            list_serializer = ListDetailSerializer(updated_list) 
+            response = {
+                "code": SUCCESSCODE,
+                "exception": False,
+                "data": {
+                    "card": list_serializer.data
+                }
+            }
+            return Response(response, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.exception(e)
+        response = FAILRESPONSE
+        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
