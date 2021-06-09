@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
 from django.db import connection
-from .models import Card, Users, WorkflowBoard, BoardList
+from .models import Card, Users, WorkflowBoard, BoardList, Attachments
 from .serializers import BoardDetailSerializer, BoardSerializer, BoardListSerializer, CardSerializer
 from .serializers import ListDetailSerializer
 from .errors import MaxBoardLimitReachedException
@@ -254,20 +254,26 @@ def create_card(request):
         data = request.data
         logger.info("request data %s", data)
         card_name = data['card_name']
-        card_desciption = data['card_description']
+        card_description = data['card_description']
         due_date = data['due_date']
         list_id = data['list_id']
         priority = data['priority']
+        attachments : list = data["attachments"]
         with transaction.atomic():
             current_list = BoardList.objects.get(pk=list_id)
             card_data = {
                 "card_name": card_name,
-                "card_desciption": card_desciption,
+                "card_description": card_description,
                 "due_date" : due_date,
                 "priority" : priority
             }
             current_card = Card.objects.create(
                 **card_data, board_list=current_list)
+            temp = []
+            if len(attachments) > 0:
+                for i in attachments:
+                    temp.append(Attachments(attachment_ref=i, card=current_card))
+                Attachments.objects.bulk_create(temp)
             card_serializer = CardSerializer(current_card)
             response = {
                 "code": SUCCESSCODE,

@@ -33,3 +33,10 @@ class Card(models.Model):
     priority = models.IntegerField(default=0)
     class Meta:
         db_table = 'project_list_card'
+
+class Attachments(models.Model):
+    attachment_id = models.AutoField(primary_key=True)
+    attachment_ref = models.TextField(default=None)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='attachment')
+    class Meta:
+        db_table = 'card_attachment'
